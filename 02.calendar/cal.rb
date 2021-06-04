@@ -29,7 +29,7 @@ if year_collect  % 4 == 0 && month_collect == 2 #うるう年の2月は何日ま
   nanniti = 29
 elsif month_collect == 2
   nanniti = 28
-elsif month_collect == 4|| month_collect == 6|| month_collect == 9 || month_collect == 11
+elsif month_collect == 4 || month_collect == 6 || month_collect == 9 || month_collect == 11
   nanniti = 30
 else
   nanniti = 31
