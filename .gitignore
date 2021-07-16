@@ -121,3 +121,4 @@ $RECYCLE.BIN/
 
 # file
 wc.rb
+.rubocop.yml
