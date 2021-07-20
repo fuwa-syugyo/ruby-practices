@@ -122,3 +122,7 @@ $RECYCLE.BIN/
 # file
 wc.rb
 .rubocop.yml
+wctest.txt
+wctest2.txt
+wctest3.txt
+wctest4.txt

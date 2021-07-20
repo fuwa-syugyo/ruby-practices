@@ -36,10 +36,10 @@ def main
 
   file_all_sort = exclude_hidden_files(file_all_sort) if options['a'] == false
 
-  option_r(file_all_sort) if options['r'] == true
+  dispyay_in_reverse_order(file_all_sort) if options['r'] == true
 
   if options['l'] == true
-    option_l(file_all_sort)
+    display_details(file_all_sort)
   else
     same_lines_columns(file_all_sort)
   end
@@ -50,7 +50,7 @@ def exclude_hidden_files(file_all_sort)
   file_all_sort - hidden_file
 end
 
-def option_r(file_all_sort)
+def dispyay_in_reverse_order(file_all_sort)
   file_all_sort.reverse!
 end
 
@@ -67,7 +67,7 @@ def same_lines_columns(file_all_sort)
   puts(file_all_sort.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' })
 end
 
-def option_l(file_all_sort)
+def display_details(file_all_sort)
   file_all_sort.each_with_index do |file_info, i|
     stat = File.stat(file_all_sort[i])
     puts [permission_alphabet(stat), stat.size, Etc.getpwuid(stat.uid).name, Etc.getgrgid(stat.gid).name,
@@ -77,8 +77,8 @@ end
 
 def permission_alphabet(stat)
   mode_alphabet = stat.mode.to_s(8)
-  if stat.ftype == 'fifo' || stat.ftype == 'characterSpecial' || stat.ftype == 'directory' || stat.ftype == 'blockSpecial'
-    mode_alphabet = "0#{stat.mode.to_s(8)}"
+  if mode_alphabet.length == 5
+    mode_alphabet = sprintf("%06d", mode_alphabet)
   else
     mode_alphabet
   end
