@@ -118,3 +118,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# file
+wc.rb
+.rubocop.yml
+wctest.txt
+wctest2.txt
+wctest3.txt
+wctest4.txt
