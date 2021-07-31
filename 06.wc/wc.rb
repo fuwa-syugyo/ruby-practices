@@ -4,6 +4,7 @@
 require 'optparse'
 
 options = ARGV.getopts('l')
+SPACE_SIZE = 8
 
 line_array = []
 elements_array = []
@@ -11,17 +12,17 @@ size_array = []
 name_array = []
 
 if ARGV.empty?
-  inputs = readlines.map { |input| input.split(' ') }
-  byte_size = inputs.map { |e| e.join ' ' }
-  ls_array = [inputs.size, inputs.join(' ').split(' ').count, byte_size.to_s.bytesize]
-  puts "      #{ls_array.join('      ')}"
+  inputs = readline(nil)
+  ls_array = [inputs.split("\n").size, inputs.split(' ').size,
+              inputs.size].map { |n| n.to_s.rjust(SPACE_SIZE) }
+  puts ls_array.join
+
 else
   ARGV.each_with_index do |_arg, i|
     f_all = File.open(ARGV[i])
     f_line = File.open(ARGV[i])
 
-    file_all = f_all.read
-    file_all = file_all.gsub(/　/, ' ')
+    file_all = f_all.read.gsub(/　/, ' ')
 
     f_line.each_line { |line| line.gsub(/　/, ' ') }
 
@@ -40,12 +41,11 @@ else
   end
 
   transpose_array.each do |x|
-    puts "      #{x.join('     ')}"
+    puts x.map { |n| n.to_s.rjust(SPACE_SIZE) }.join(' ')
   end
 
   if line_array.size > 1
     rm_name_array << 'total'
-    rm_name_array.map!(&:to_s)
-    puts "      #{rm_name_array.join('     ')}"
+    puts rm_name_array.map { |n| n.to_s.rjust(SPACE_SIZE) }.join(' ')
   end
 end
