@@ -4,7 +4,7 @@ class Shot
   attr_reader :mark
 
   def initialize(mark)
-    @mark = mark # markは入力値
+    @mark = mark
   end
 
   def score

@@ -14,4 +14,14 @@ class Frame
   def calc_frame
     [first_shot.score, second_shot.score, third_shot.score].sum
   end
+
+  def strike?
+    first_shot.score == 10
+    # 次の2投の得点追加の処理もここで？
+  end
+
+  def spare?
+    [first_shot.score, second_shot.score].sum == 10 && first_shot.score != 10
+    # 次の1投の得点追加の処理もここで？
+  end
 end
