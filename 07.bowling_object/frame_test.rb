@@ -17,6 +17,6 @@ class FrameTest < Minitest::Test
 
   def test_spare_frame
     frame = Frame.new("6", "4", "5")
-    assert_equal 15, frame.calc_frame
+    assert_equal 1, frame.calc_frame
   end
 end
