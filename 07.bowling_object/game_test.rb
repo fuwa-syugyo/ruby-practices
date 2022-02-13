@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'game.rb'
+require_relative 'game'
 require 'minitest/autorun'
 
 class GameTest < Minitest::Test
@@ -14,12 +14,12 @@ class GameTest < Minitest::Test
     assert_equal 164, game.calc_score
   end
 
-  def test_calc_X_or_10
+  def test_calc_x_or_ten
     game = Game.new('0,10,1,5,0,0,0,0,X,X,X,5,1,8,1,0,4')
     assert_equal 107, game.calc_score
   end
 
-  def test_calc_last_frame_10
+  def test_calc_last_frame_ten
     game = Game.new('6,3,9,0,0,3,8,2,7,3,X,9,1,8,0,X,X,0,0')
     assert_equal 134, game.calc_score
   end
