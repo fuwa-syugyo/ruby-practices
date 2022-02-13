@@ -16,7 +16,7 @@ class Game
       first_mark, second_mark, third_mark = @marks.slice(0, 3)
       f = Frame.new(first_mark, second_mark, third_mark)
       if f.strike?
-        @marks.shift(1)
+        @marks.shift
       else
         @marks.shift(2)
       end
@@ -26,9 +26,13 @@ class Game
 
   def calc_score
     point = 0
+
     @frames.each do |frame|
       point += frame.calc_frame
     end
-    point
+    p point
   end
 end
+
+game = Game.new(ARGV[0])
+game.calc_score
