@@ -13,7 +13,6 @@ class Game
     @frames = []
 
     10.times do
-      # 最初から3投分のmarkを取得する
       first_mark, second_mark, third_mark = @marks.slice(0, 3)
       f = Frame.new(first_mark, second_mark, third_mark)
       if f.strike?
@@ -26,7 +25,10 @@ class Game
   end
 
   def calc_score
-    164
+    point = 0
+    @frames.each do |frame|
+      point += frame.calc_frame
+    end
+    point
   end
-
 end
