@@ -10,7 +10,7 @@ class Frame
   end
 
   def calc_frame
-    if @first_shot.score == 10 || [@first_shot.score, @second_shot.score].sum ==10
+    if strike? || spare?
       [@first_shot.score, @second_shot.score, @third_shot.score].sum
     else
       [@first_shot.score, @second_shot.score].sum
@@ -23,7 +23,7 @@ class Frame
   end
 
   def spare?
-    [@first_shot.score, @second_shot.score].sum == 10 && @first_shot.score != 10
+    [@first_shot.score, @second_shot.score].sum == 10 && !strike?
     # 次の1投の得点追加の処理もここで？
   end
 end
