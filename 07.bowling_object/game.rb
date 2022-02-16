@@ -24,11 +24,6 @@ class Game
   end
 
   def calc_score
-    point = 0
-
-    @frames.each do |frame|
-      point += frame.calc_frame
-    end
-    point
+    @frames.sum(&:calc_frame)
   end
 end
