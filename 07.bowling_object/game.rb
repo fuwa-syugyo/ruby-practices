@@ -29,6 +29,6 @@ class Game
     @frames.each do |frame|
       point += frame.calc_frame
     end
-    p point
+    point
   end
 end
