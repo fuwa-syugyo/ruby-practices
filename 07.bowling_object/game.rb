@@ -24,6 +24,6 @@ class Game
   end
 
   def calc_score
-    @frames.sum(&:calc_frame)
+    @frames.sum(&:calc_sum_score)
   end
 end
