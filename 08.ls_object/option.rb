@@ -15,7 +15,6 @@ class Option
       opt.on('-a') { |v| @params[:dot_match] = v }
       opt.parse!(ARGV)
       create_all_file_array
-      p @params
   end
 
   def run_ls(long_format: false, reverse: false, dot_match: false)
@@ -32,6 +31,13 @@ class Option
   end
 
   def ls_short
+    unless @params[:dot_match]
+      exclude_hidden_files
+    end
+    if @params[:reverse]
+      dispyay_in_reverse_order
+    end
+
     if (@file_all.size % OUTPUT_COLUMN_SIZE).zero?
       column_size = @file_all.size / OUTPUT_COLUMN_SIZE
     else
@@ -40,24 +46,15 @@ class Option
         @file_all << ' '
       end
     end
-
-    @file_all_fix =  @file_all.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' }
-
-    unless @params[:dot_match]
-      exclude_hidden_files
-    end
-    if @params[:reverse]
-      dispyay_in_reverse_order
-    end
-    puts @file_all_fix
+    puts @file_all.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' }
   end
 
   def exclude_hidden_files
-    @file_all_fix -= @file_all_fix.grep(/^\./)
+    @file_all -= @file_all.grep(/^\./)
   end
 
   def dispyay_in_reverse_order
-    @file_all_fix.reverse!
+    @file_all.reverse!
   end
 
   def ls_long(file_paths)
