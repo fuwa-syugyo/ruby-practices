@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require './command.rb'
+require './option.rb'
 
-command = Command.new(ARGV[0])
+option = Option.new
 # p command.run_ls(**params)
-command.same_lines_columns
+option.run_ls
