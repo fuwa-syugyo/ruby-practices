@@ -30,13 +30,18 @@ class Option
     end
   end
 
-  def ls_short
+  def short_option
     unless @params[:dot_match]
       exclude_hidden_files
     end
     if @params[:reverse]
       dispyay_in_reverse_order
     end
+  end
+
+  def ls_short
+    short_option
+    @file_all_fix = []
 
     if (@file_all.size % OUTPUT_COLUMN_SIZE).zero?
       column_size = @file_all.size / OUTPUT_COLUMN_SIZE
@@ -46,7 +51,12 @@ class Option
         @file_all << ' '
       end
     end
-    puts @file_all.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' }
+    @file_word_count = @file_all.map {|e| e.size }.each_slice(column_size).to_a
+    max_word_count = @file_word_count.each {|e| e.fill(e.max)}.flatten
+    @file_all.map.with_index do |f, i|
+      @file_all_fix << f.ljust(max_word_count[i])
+    end
+    puts @file_all_fix.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' }
   end
 
   def exclude_hidden_files
@@ -57,14 +67,13 @@ class Option
     @file_all.reverse!
   end
 
-  def ls_long(file_paths)
-    row_data = file_paths.map do |file_path|
-      stat = File::Stat.new(file_path)
-      build_data(file_path, stat)
+  def ls_long
+    short_option
+    
+    @file_all.each_with_index do |file_info, i|
+      stat = File.stat(@file_all[i])
+      puts [permission_alphabet(stat), stat.size, Etc.getpwuid(stat.uid).name, Etc.getgrgid(stat.gid).name,
+            stat.mtime.strftime('%Y-%m-%d %H:%M'), file_info].join(' ').to_s
     end
-    block_total = row_data.sum { |data| data[:blocks] }
-    total = "total #{block_total}"
-    body = render_long_format_body(row_data)
-    [total, *body].join("\n")
   end
 end
