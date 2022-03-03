@@ -5,4 +5,4 @@ require './option.rb'
 
 option = Option.new
 # p command.run_ls(**params)
-option.run_ls
+puts option.run_ls

@@ -30,7 +30,7 @@ class Option
     end
   end
 
-  def short_option
+  def dot_or_reverse
     unless @params[:dot_match]
       exclude_hidden_files
     end
@@ -40,7 +40,7 @@ class Option
   end
 
   def ls_short
-    short_option
+    dot_or_reverse
     @file_all_fix = []
 
     if (@file_all.size % OUTPUT_COLUMN_SIZE).zero?
@@ -56,7 +56,7 @@ class Option
     @file_all.map.with_index do |f, i|
       @file_all_fix << f.ljust(max_word_count[i])
     end
-    puts @file_all_fix.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' }
+    @file_all_fix.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' }
   end
 
   def exclude_hidden_files
@@ -68,7 +68,7 @@ class Option
   end
 
   def ls_long
-    short_option
+    dot_or_reverse
     
     @file_all.each_with_index do |file_info, i|
       stat = File.stat(@file_all[i])
