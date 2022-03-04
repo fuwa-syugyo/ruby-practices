@@ -3,6 +3,7 @@
 require 'optparse'
 require 'fileutils'
 require 'etc'
+require_relative 'file_info'
 
 OUTPUT_COLUMN_SIZE = 3
 
@@ -15,11 +16,12 @@ class Option
       opt.on('-a') { |v| @params[:dot_match] = v }
       opt.parse!(ARGV)
       create_all_file_array
+      @file_all_fix = []
   end
 
   def run_ls(long_format: false, reverse: false, dot_match: false)
     dot_or_reverse
-    long_format ? ls_long : ls_short
+    @params[:long_format] ? ls_long : ls_short
   end
 
   def create_all_file_array
@@ -40,9 +42,15 @@ class Option
     end
   end
 
-  def ls_short
-    @file_all_fix = []
+  def exclude_hidden_files
+    @file_all -= @file_all.grep(/^\./)
+  end
 
+  def dispyay_in_reverse_order
+    @file_all.reverse!
+  end
+
+  def ls_short
     if (@file_all.size % OUTPUT_COLUMN_SIZE).zero?
       column_size = @file_all.size / OUTPUT_COLUMN_SIZE
     else
@@ -59,40 +67,11 @@ class Option
     @file_all_fix.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' }
   end
 
-  def exclude_hidden_files
-    @file_all -= @file_all.grep(/^\./)
-  end
-
-  def dispyay_in_reverse_order
-    @file_all.reverse!
-  end
-
   def ls_long
     @file_all.each_with_index do |file_info, i|
-      stat = File.stat(@file_all[i])
-      [permission_alphabet(stat), stat.size, Etc.getpwuid(stat.uid).name, Etc.getgrgid(stat.gid).name,
-        stat.mtime.strftime('%Y-%m-%d %H:%M'), file_info].join(' ').to_s
+      stat = FileInfo.new(file_info)
+      @file_all_fix << stat.build_data
     end
-  end
-
-  def permission_alphabet(stat)
-    mode_alphabet = stat.mode.to_s(8)
-    if mode_alphabet.length == 5
-        mode_alphabet = sprintf("%06d", mode_alphabet)
-    else
-      mode_alphabet
-    end
-
-    mode_alphabet_array = mode_alphabet.chars
-    mode_alphabet_array[0, 3] = mode_alphabet_array[0..1].join
-    make_permission(mode_alphabet_array)
-  end
-
-  def make_permission(mode_alphabet_array)
-    permission_array = []
-    mode_alphabet_array.each do |n|
-      permission_array << MODE_MAP[n]
-    end
-    permission_array.join
+    @file_all_fix
   end
 end
