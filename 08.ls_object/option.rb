@@ -18,6 +18,7 @@ class Option
   end
 
   def run_ls(long_format: false, reverse: false, dot_match: false)
+    dot_or_reverse
     long_format ? ls_long : ls_short
   end
 
@@ -40,7 +41,6 @@ class Option
   end
 
   def ls_short
-    dot_or_reverse
     @file_all_fix = []
 
     if (@file_all.size % OUTPUT_COLUMN_SIZE).zero?
@@ -68,12 +68,31 @@ class Option
   end
 
   def ls_long
-    dot_or_reverse
-    
     @file_all.each_with_index do |file_info, i|
       stat = File.stat(@file_all[i])
-      puts [permission_alphabet(stat), stat.size, Etc.getpwuid(stat.uid).name, Etc.getgrgid(stat.gid).name,
-            stat.mtime.strftime('%Y-%m-%d %H:%M'), file_info].join(' ').to_s
+      [permission_alphabet(stat), stat.size, Etc.getpwuid(stat.uid).name, Etc.getgrgid(stat.gid).name,
+        stat.mtime.strftime('%Y-%m-%d %H:%M'), file_info].join(' ').to_s
     end
+  end
+
+  def permission_alphabet(stat)
+    mode_alphabet = stat.mode.to_s(8)
+    if mode_alphabet.length == 5
+        mode_alphabet = sprintf("%06d", mode_alphabet)
+    else
+      mode_alphabet
+    end
+
+    mode_alphabet_array = mode_alphabet.chars
+    mode_alphabet_array[0, 3] = mode_alphabet_array[0..1].join
+    make_permission(mode_alphabet_array)
+  end
+
+  def make_permission(mode_alphabet_array)
+    permission_array = []
+    mode_alphabet_array.each do |n|
+      permission_array << MODE_MAP[n]
+    end
+    permission_array.join
   end
 end
