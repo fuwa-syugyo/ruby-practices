@@ -8,6 +8,8 @@ require_relative 'file_info'
 OUTPUT_COLUMN_SIZE = 3
 
 class Option
+  attr_accessor :file_all
+
   def initialize
       opt = OptionParser.new
       @params = { long_format: false, reverse: false, dot_match: false }
@@ -20,7 +22,6 @@ class Option
   end
 
   def run_ls(long_format: false, reverse: false, dot_match: false)
-    dot_or_reverse
     @params[:long_format] ? ls_long : ls_short
   end
 
@@ -31,6 +32,7 @@ class Option
         @file_all << file
         @file_all.sort!
     end
+    dot_or_reverse
   end
 
   def dot_or_reverse
@@ -59,19 +61,50 @@ class Option
         @file_all << ' '
       end
     end
-    @file_word_count = @file_all.map {|e| e.size }.each_slice(column_size).to_a
-    max_word_count = @file_word_count.each {|e| e.fill(e.max)}.flatten
+    @file_word_count = @file_all.map {|file_info| file_info.size }.each_slice(column_size).to_a
+    max_word_count = @file_word_count.each {|file_info| file_info.fill(file_info.max)}.flatten
     @file_all.map.with_index do |f, i|
       @file_all_fix << f.ljust(max_word_count[i])
     end
-    @file_all_fix.each_slice(column_size).to_a.transpose.map { |e| e.join '  ' }
+    @file_all_fix.each_slice(column_size).to_a.transpose.map { |file_info| file_info.join '  ' }
   end
 
   def ls_long
-    @file_all.each_with_index do |file_info, i|
+    @file_all.each do |file_info|
       stat = FileInfo.new(file_info)
       @file_all_fix << stat.build_data
     end
-    @file_all_fix
+
+    body = render_long_format_body
+    [*body].join("\n")
+  end
+
+  def render_long_format_body
+    @max_sizes = %i[size user group].map do |key|
+    find_max_size(key)
+    end
+    @file_all_fix.map do |data|
+      format_row(data, *@max_sizes)
+    end
+  end
+
+  def find_max_size(key)
+    @file_all_fix.map { |data| data[key].size }.max
+  end
+
+  def format_row(data, max_size, max_user, max_group)
+    [
+      data[:type_and_mode],
+      "  #{data[:size].to_s.rjust(max_size - 4)}",
+      " #{data[:user].ljust(max_user)}",
+      " #{data[:group].ljust(max_group)}",
+      " #{data[:mtime]}",
+      " #{data[:basename]}"
+    ].join
+  end
+  
+  def format_mode(mode)
+    digits = mode.to_s(8)[-3..-1]
+    digits.gsub(/./, MODE_MAP)
   end
 end
