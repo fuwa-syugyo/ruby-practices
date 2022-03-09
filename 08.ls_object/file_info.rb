@@ -58,4 +58,15 @@ class FileInfo
   def basename
     File.basename(@file_name)
   end
+
+  def build_data
+    {
+      type_and_mode: type_and_mode,
+      size: size,
+      user: user,
+      group: group,
+      mtime: mtime,
+      basename: basename
+    }
+  end
 end

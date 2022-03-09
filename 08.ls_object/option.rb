@@ -8,13 +8,7 @@ require_relative 'before_file_info'
 
 OUTPUT_COLUMN_SIZE = 3
 
-  # やること
-  # @file_all_fixを@file_info_arrayに書き換える
-  # file_info.rbのメソッドを実装する
-
 class Option
-  attr_accessor :file_all
-
   def initialize
     opt = OptionParser.new
     @params = { long_format: false, reverse: false, dot_match: false }
@@ -23,7 +17,6 @@ class Option
     opt.on('-a') { |v| @params[:dot_match] = v }
     opt.parse!(ARGV)
     create_all_file_array
-    @file_all_fix = []
     @file_info_array = []
   end
 
@@ -64,20 +57,16 @@ class Option
         @file_all << ' '
       end
     end
+    
     @file_word_count = @file_all.map { |file_info| file_info.size }.each_slice(column_size).to_a
     max_word_count = @file_word_count.each { |file_info| file_info.fill(file_info.max) }.flatten
     @file_all.map.with_index do |f, i|
-      @file_all_fix << f.ljust(max_word_count[i])
+      @file_info_array << f.ljust(max_word_count[i])
     end
-    @file_all_fix.each_slice(column_size).to_a.transpose.map { |file_info| file_info.join '  ' }
+    @file_info_array.each_slice(column_size).to_a.transpose.map { |file_info| file_info.join '  ' }
   end
 
   def ls_long
-    @file_all.each do |file_info|
-      stat = BeforeFileInfo.new(file_info)
-      @file_all_fix << stat.build_data
-    end
-
     @file_all.each do |file_name|
       file_info = FileInfo.new(file_name)
       @file_info_array << file_info
@@ -97,7 +86,7 @@ class Option
   end
 
   def find_max_size(key)
-    @file_all_fix.map { |data| data[key].size }.max
+    @file_info_array.map { |file_info| file_info.build_data[key].size }.max
   end
 
   def format_row(file_info, max_size, max_user, max_group)
