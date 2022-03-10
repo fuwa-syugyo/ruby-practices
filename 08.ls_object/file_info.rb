@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'etc'
+
 class FileInfo
   def initialize(file_name)
     @stat = File.stat(file_name)
