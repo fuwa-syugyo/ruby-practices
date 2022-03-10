@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require './option'
+require './command'
 
-option = Option.new
-puts option.run_ls
+command = Command.new
+puts command.run_ls
