@@ -2,7 +2,7 @@
 
 require 'optparse'
 
-class Option
+class CreateFile
   def initialize
     opt = OptionParser.new
     @params = { long_format: false, reverse: false, dot_match: false }
@@ -11,10 +11,10 @@ class Option
     opt.on('-a') { |v| @params[:dot_match] = v }
     opt.parse!(ARGV)
     @file_info_array = []
-    create_all_file_array
+    create_files
   end
 
-  def create_all_file_array
+  def create_files
     @file_all = []
     Dir.foreach('.') do |file|
       next if ['.', '..'].include?(file)

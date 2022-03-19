@@ -2,19 +2,19 @@
 
 require 'fileutils'
 require_relative 'file_info'
-require_relative 'option'
+require_relative 'create_file'
 
 OUTPUT_COLUMN_SIZE = 3
 
 class Command
   def initialize
-    option = Option.new
-    @params = option.instance_variable_get(:@params)
-    @file_all = option.instance_variable_get(:@file_all)
+    create_file = CreateFile.new
+    @params = create_file.instance_variable_get(:@params)
+    @file_all = create_file.instance_variable_get(:@file_all)
     @file_info_array = []
   end
 
-  def run_ls(*)
+  def run_ls
     @params[:long_format] ? ls_long : ls_short
   end
 

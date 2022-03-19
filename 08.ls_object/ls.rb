@@ -3,5 +3,5 @@
 
 require './command'
 
-command = Command.new
+command = Command.new#(ARGV)
 puts command.run_ls
