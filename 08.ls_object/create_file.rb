@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'fileutils'
+require_relative 'file_info'
+
+OUTPUT_COLUMN_SIZE = 3
 
 class CreateFile
   def initialize(params)
@@ -71,7 +75,7 @@ class CreateFile
   end
 
   def find_max_size(key)
-    @file_info_array.map { |file_info| file_info.build_data[key].size }.max
+    @file_info_array.map { |file_info| file_info.data_to_hash[key].size }.max
   end
 
   def format_row(file_info, max_size, max_user, max_group)
