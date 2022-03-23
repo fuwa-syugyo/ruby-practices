@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-require_relative 'create_file'
+require_relative 'gather'
+require_relative 'display'
 
 class Command
   def initialize(params)
-    @create_file = CreateFile.new(params)
+    gather = Gather.new(params)
+    @display = Display.new(gather.create_files)
     @params = params
   end
 
@@ -13,10 +15,10 @@ class Command
   end
 
   def format_short_option
-    @create_file.format_short_option
+    @display.format_short_option
   end
 
   def format_long_option
-    @create_file.format_long_option
+    @display.format_long_option
   end
 end

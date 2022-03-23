@@ -1,40 +1,13 @@
 # frozen_string_literal: true
 
-require 'optparse'
-require 'fileutils'
 require_relative 'file_info'
 
 OUTPUT_COLUMN_SIZE = 3
 
-class CreateFile
-  def initialize(params)
-    @params = params
+class Display
+  def initialize(gather)
+    @file_all = gather
     @file_info_array = []
-    create_files
-  end
-
-  def create_files
-    @file_all = []
-    Dir.foreach('.') do |file|
-      next if ['.', '..'].include?(file)
-
-      @file_all << file
-      @file_all.sort!
-    end
-    dot_or_reverse
-  end
-
-  def dot_or_reverse
-    exclude_hidden_files unless @params[:dot_match]
-    dispyay_in_reverse_order if @params[:reverse]
-  end
-
-  def exclude_hidden_files
-    @file_all -= @file_all.grep(/^\./)
-  end
-
-  def dispyay_in_reverse_order
-    @file_all.reverse!
   end
 
   def format_short_option
