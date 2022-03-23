@@ -48,7 +48,7 @@ class Display
   end
 
   def find_max_size(key)
-    @file_info_array.map { |file_info| file_info.data_to_hash[key].size }.max
+    @file_info_array.map { |file_info| file_info.to_hash[key].size }.max
   end
 
   def format_row(file_info, max_size, max_user, max_group)

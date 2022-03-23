@@ -5,8 +5,8 @@ require_relative 'display'
 
 class Command
   def initialize(params)
-    gather = Gather.new(params)
-    @display = Display.new(gather.create_files)
+    gather = Gather.new(params).create_files
+    @display = Display.new(gather)
     @params = params
   end
 

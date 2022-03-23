@@ -63,7 +63,7 @@ class FileInfo
     File.basename(@file_name)
   end
 
-  def data_to_hash
+  def to_hash
     {
       type_and_mode: type_and_mode,
       size: size,
