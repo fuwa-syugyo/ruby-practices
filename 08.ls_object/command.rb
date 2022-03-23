@@ -5,20 +5,20 @@ require_relative 'display'
 
 class Command
   def initialize(params)
-    gather = Gather.new(params).create_files
-    @display = Display.new(gather)
+    files = Gather.new(params).create_files
+    @display = Display.new(files)
     @params = params
   end
 
   def run_ls
-    @params[:long_format] ? format_long_option : format_short_option
+    @params[:long_format] ? execution_long_option : execution_short_option
   end
 
-  def format_short_option
+  def execution_short_option
     @display.format_short_option
   end
 
-  def format_long_option
+  def execution_long_option
     @display.format_long_option
   end
 end

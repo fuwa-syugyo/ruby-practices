@@ -15,12 +15,8 @@ class Gather
       @file_all << file
       @file_all.sort!
     end
-    run_short_option
-    @file_all
-  end
-
-  def run_short_option
     @file_all -= @file_all.grep(/^\./) unless @params[:dot_match]
     @file_all.reverse! if @params[:reverse]
+    @file_all
   end
 end
