@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 require_relative 'file_info'
-
 OUTPUT_COLUMN_SIZE = 3
 
 class Display
-  def initialize(gather)
-    @file_all = gather
-    @file_info_array = []
+  def initialize(files)
+    @file_all = files
   end
 
   def format_short_option
+    file_name_array = []
+
     if (@file_all.size % OUTPUT_COLUMN_SIZE).zero?
       column_size = @file_all.size / OUTPUT_COLUMN_SIZE
     else
@@ -20,18 +20,19 @@ class Display
       end
     end
 
-    @file_word_count = @file_all.map(&:size).each_slice(column_size).to_a
-    max_word_count = @file_word_count.each { |file_info| file_info.fill(file_info.max) }.flatten
+    file_word_count = @file_all.map(&:size).each_slice(column_size).to_a
+    max_word_count = file_word_count.each { |file_info| file_info.fill(file_info.max) }.flatten
     @file_all.map.with_index do |f, i|
-      @file_info_array << f.ljust(max_word_count[i])
+      file_name_array << f.ljust(max_word_count[i])
     end
-    @file_info_array.each_slice(column_size).to_a.transpose.map { |file_info| file_info.join '  ' }
+    file_name_array.each_slice(column_size).to_a.transpose.map { |file_info| file_info.join '  ' }
   end
 
   def format_long_option
+    @file_info_array = []
+    
     @file_all.each do |file_name|
-      file_info = FileInfo.new(file_name)
-      @file_info_array << file_info
+      @file_info_array << FileInfo.new(file_name)
     end
 
     body = format_long_body
