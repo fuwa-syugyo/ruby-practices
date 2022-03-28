@@ -12,15 +12,14 @@ class Gather
     file_all = []
     Dir.foreach('.') do |file|
       next if ['.', '..'].include?(file)
-      if @params[:dot_match] 
+
+      if @params[:dot_match]
         file_all << FileInfo.new(file)
-      else 
-        if File.fnmatch('*', file)
-          file_all << FileInfo.new(file)
-        end
+      elsif File.fnmatch('*', file)
+        file_all << FileInfo.new(file)
       end
     end
-    file_all.sort! { |a, b| a.basename <=> b.basename}
+    file_all.sort! { |a, b| a.basename <=> b.basename }
     file_all.reverse! if @params[:reverse]
     file_all
   end
