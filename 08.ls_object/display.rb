@@ -4,8 +4,14 @@ require_relative 'file_info'
 OUTPUT_COLUMN_SIZE = 3
 
 class Display
-  def initialize(files)
+  def initialize(files, params)
     @file_all = files
+    @params = params
+    puts format_option
+  end
+
+  def format_option
+    @params[:long_format] ? format_long_option : format_short_option
   end
 
   def format_short_option

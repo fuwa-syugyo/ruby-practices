@@ -11,5 +11,4 @@ opt.on('-r') { |v| params[:reverse] = v }
 opt.on('-a') { |v| params[:dot_match] = v }
 opt.parse!(ARGV)
 
-command = Command.new(params)
-puts command.run_ls
+Command.new(params)
