@@ -21,7 +21,7 @@ class Gather
       end
     end
     file_all.sort! { |a, b| a.basename <=> b.basename}
-    file_all.reverse! { |a, b| a.basename <=> b.basename} if @params[:reverse]
+    file_all.reverse! if @params[:reverse]
     file_all
   end
 end

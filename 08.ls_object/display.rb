@@ -16,22 +16,26 @@ class Display
 
   def format_short_option
     file_name_array = []
+    fix_file_name_array = []
+    @file_all.each do |file_name|
+      file_name_array << file_name.basename
+    end
 
-    if (@file_all.size % OUTPUT_COLUMN_SIZE).zero?
-      column_size = @file_all.size / OUTPUT_COLUMN_SIZE
+    if (file_name_array.size % OUTPUT_COLUMN_SIZE).zero?
+      column_size = file_name_array.size / OUTPUT_COLUMN_SIZE
     else
-      column_size = @file_all.size / OUTPUT_COLUMN_SIZE + 1
-      (column_size * OUTPUT_COLUMN_SIZE - @file_all.size).times do
-        @file_all << ' '
+      column_size = file_name_array.size / OUTPUT_COLUMN_SIZE + 1
+      (column_size * OUTPUT_COLUMN_SIZE - file_name_array.size).times do
+        file_name_array << ' '
       end
     end
 
-    file_word_count = @file_all.map(&:size).each_slice(column_size).to_a
+    file_word_count = file_name_array.map(&:size).each_slice(column_size).to_a
     max_word_count = file_word_count.each { |file_info| file_info.fill(file_info.max) }.flatten
-    @file_all.map.with_index do |f, i|
-      file_name_array << f.ljust(max_word_count[i])
+    file_name_array.map.with_index do |f, i|
+      fix_file_name_array << f.ljust(max_word_count[i])
     end
-    file_name_array.each_slice(column_size).to_a.transpose.map { |file_info| file_info.join '  ' }
+    fix_file_name_array.each_slice(column_size).to_a.transpose.map { |file_info| file_info.join '  ' }
   end
 
   def format_long_option
