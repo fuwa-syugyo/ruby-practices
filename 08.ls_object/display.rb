@@ -30,7 +30,7 @@ class Display
 
   def format_long_option
     @file_info_array = []
-    
+
     @file_all.each do |file_name|
       @file_info_array << FileInfo.new(file_name)
     end

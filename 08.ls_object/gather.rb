@@ -11,6 +11,7 @@ class Gather
     file_all = []
     Dir.foreach('.') do |file|
       next if ['.', '..'].include?(file)
+
       file_all -= file_all.grep(/^\./) unless @params[:dot_match]
       file_all << file
     end
