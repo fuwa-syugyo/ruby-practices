@@ -35,12 +35,6 @@ class Display
   end
 
   def format_long_option
-    @file_info_array = []
-
-    @file_all.each do |file_name|
-      @file_info_array << FileInfo.new(file_name)
-    end
-
     body = format_long_body
     [*body].join("\n")
   end
@@ -49,13 +43,13 @@ class Display
     @max_sizes = %i[size user group].map do |key|
       find_max_size(key)
     end
-    @file_info_array.map do |file_info|
+    @file_all.map do |file_info|
       format_row(file_info, *@max_sizes)
     end
   end
 
   def find_max_size(key)
-    @file_info_array.map { |file_info| file_info.to_hash[key].size }.max
+    @file_all.map { |file_info| file_info.to_hash[key].size }.max
   end
 
   def format_row(file_info, max_size, max_user, max_group)
